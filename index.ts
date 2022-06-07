@@ -34,16 +34,30 @@ client.on('messageCreate', async (message) => {
         message.reply({
             content: '**Player:** ' + playerStats.Name + ' , **Games played:** ' + playerStats.Games + ' , **Wins:** ' + playerStats.Wins + ', **Win Rate:** ' + winRate + '%'
         })
-    } else if(message.content === 'mtg -report game'){
-       
+    } else if(message.content.includes('mtg -report game')){
+        var outcome: boolean = false;
+        const wordsArray: string[] = [];
+        message.content.toString().split(' ').map(item => wordsArray.push(item));
+        console.log(wordsArray);
+        if(wordsArray[4].toString().toUpperCase() === 'w'.toUpperCase()){
+            outcome = true;
+            reportGame(playerName, wordsArray[3], outcome);
+        } else if(wordsArray[4].toString().toUpperCase() === 'l'.toUpperCase()){
+            outcome = false;
+            reportGame(playerName, wordsArray[3], outcome);
+        } else{
+            message.reply({
+                content: "I couldn't quite understand that. Please try again and make sure your formatting is correct."
+            })
+        }
     } else if(message.content === 'mtg -commander stats'){
         const commanderStats: any[] = await checkAllCommanderStats();
-            commanderStats.forEach(commander => {
-                const winRate = (commander.Wins/commander.Games) * 100;
-                message.reply({
-                    content: '**Commander:** ' + commander.Name + ', **Commander Owner:** ' + commander.playerId + ' , **Games played:** ' + commander.Games + ' , **Wins:** ' + commander.Wins + ', **Win Rate:** ' + winRate + '%'
-                })
-            });
+        commanderStats.forEach(commander => {
+            const winRate = (commander.Wins/commander.Games) * 100;
+            message.reply({
+                content: '**Commander:** ' + commander.Name + ', **Commander Owner:** ' + commander.playerId + ' , **Games played:** ' + commander.Games + ' , **Wins:** ' + commander.Wins + ', **Win Rate:** ' + winRate + '%'
+            })
+        });
     } else if(message.content.includes('mtg -commander stats !')){
         const commanderName: string = message.content.toString().split('!')[1];
         const commanderStats: any = await getCommanderStats(commanderName);

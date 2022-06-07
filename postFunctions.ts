@@ -10,12 +10,8 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 
 //This is the only one that doesn't work
-export async function reportGame(playerName: string, win: boolean){
-    await setDoc(doc(db, 'players', playerName), {
-        Name: playerName,
-        Games: 0,
-        Wins: 0,
-    })
+export async function reportGame(playerName: string,commanderName: string, outcome: boolean){
+    console.log(playerName, commanderName, outcome);
 }
 
 export async function addPlayer(playerName: string) {
