@@ -1,7 +1,5 @@
-import { async, Observable } from '@firebase/util';
 import {initializeApp} from 'firebase/app'
 import {collection, getFirestore, getDocs, doc, getDoc} from 'firebase/firestore'
-import { player, commander } from './models';
 
 const firebaseConfig = require("./service_account/serviceAccountKey.json");
 

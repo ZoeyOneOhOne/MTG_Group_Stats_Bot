@@ -1,4 +1,4 @@
-import DiscordJS, { Intents, Message } from 'discord.js'
+import DiscordJS, { Intents } from 'discord.js'
 import dotenv from 'dotenv'
 import {getAllPlayerStats, checkStats, checkAllCommanderStats, getCommanderStats} from './requestFunctions'
 import { reportGame, addPlayer, addCommander } from './postFunctions';
@@ -14,7 +14,7 @@ const client = new DiscordJS.Client({
 })
 
 client.on('ready', () => {
-    console.log('The bot is ready.');
+    console.log('The bot is running...');
 })
 
 client.on('messageCreate', async (message) => {
@@ -38,14 +38,11 @@ client.on('messageCreate', async (message) => {
         var outcome: boolean = false;
         const wordsArray: string[] = [];
         message.content.toString().split(' ').map(item => wordsArray.push(item));
-        console.log(wordsArray);
         if(wordsArray[4].toString().toUpperCase() === 'w'.toUpperCase()){
             outcome = true;
             const player: any = await checkStats(playerName);
-            console.log(player);
             const games = player.Games + 1;
             const wins = player.Wins + 1;
-            console.log(games, wins);
             reportGame(playerName, wordsArray[3], wins, games);
             message.reply({
                 content: "Good win. Stats saved."
@@ -53,10 +50,8 @@ client.on('messageCreate', async (message) => {
         } else if(wordsArray[4].toString().toUpperCase() === 'l'.toUpperCase()){
             outcome = false;
             const player: any = await checkStats(playerName);
-            console.log(player);
             const games = player.Games + 1;
             const wins = player.Wins;
-            console.log(games, wins);
             reportGame(playerName, wordsArray[3], wins, games);
             message.reply({
                 content: "Game stats saved."
