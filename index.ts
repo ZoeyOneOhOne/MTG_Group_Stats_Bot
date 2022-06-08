@@ -41,10 +41,26 @@ client.on('messageCreate', async (message) => {
         console.log(wordsArray);
         if(wordsArray[4].toString().toUpperCase() === 'w'.toUpperCase()){
             outcome = true;
-            reportGame(playerName, wordsArray[3], outcome);
+            const player: any = await checkStats(playerName);
+            console.log(player);
+            const games = player.Games + 1;
+            const wins = player.Wins + 1;
+            console.log(games, wins);
+            reportGame(playerName, wordsArray[3], wins, games);
+            message.reply({
+                content: "Good win. Stats saved."
+            })
         } else if(wordsArray[4].toString().toUpperCase() === 'l'.toUpperCase()){
             outcome = false;
-            reportGame(playerName, wordsArray[3], outcome);
+            const player: any = await checkStats(playerName);
+            console.log(player);
+            const games = player.Games + 1;
+            const wins = player.Wins;
+            console.log(games, wins);
+            reportGame(playerName, wordsArray[3], wins, games);
+            message.reply({
+                content: "Game stats saved."
+            })
         } else{
             message.reply({
                 content: "I couldn't quite understand that. Please try again and make sure your formatting is correct."
