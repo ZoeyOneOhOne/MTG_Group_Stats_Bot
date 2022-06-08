@@ -19,8 +19,13 @@ client.on('ready', () => {
 
 client.on('messageCreate', async (message) => {
     const playerName = message.author.username;
+    const errorMessage = "Either I couldn't quite understand that or there is a problem with the server.\n" +
+                        "Please try again and make sure your formatting is correct. \n" +
+                        "Use mtg -help if you need help. \n"
 
+    if(playerName != 'MTG Group Stats'){
     if(message.content === 'mtg -all player stats'){
+        try {
         const stats: any[] = await getAllPlayerStats();
             stats.forEach(player => {
                 const winRate = (player.Wins/player.Games) * 100;
@@ -28,67 +33,122 @@ client.on('messageCreate', async (message) => {
                     content: '**Name:** ' + player.Name + ' , **Games:** ' + player.Games + ' , **Wins:** ' + player.Wins + ', **Win Rate:** ' + winRate
                 })
             });
+        } catch(e){
+            console.log(e);
+            message.reply({
+                content: errorMessage
+            })
+        }
     } else if(message.content === 'mtg -player stats'){
-        const playerStats: any = await checkStats(playerName);
-        const winRate = (playerStats.Wins/playerStats.Games) * 100;
-        message.reply({
-            content: '**Player:** ' + playerStats.Name + ' , **Games played:** ' + playerStats.Games + ' , **Wins:** ' + playerStats.Wins + ', **Win Rate:** ' + winRate + '%'
-        })
+        try{
+            const playerStats: any = await checkStats(playerName);
+            const winRate = (playerStats.Wins/playerStats.Games) * 100;
+            message.reply({
+                content: '**Player:** ' + playerStats.Name + ' , **Games played:** ' + playerStats.Games + ' , **Wins:** ' + playerStats.Wins + ', **Win Rate:** ' + winRate + '%'
+            })
+        } catch(e){
+            console.log(e);
+            message.reply({
+                content: errorMessage
+            })
+        }
     } else if(message.content.includes('mtg -report game')){
         var outcome: boolean = false;
         const wordsArray: string[] = [];
         message.content.toString().split(' ').map(item => wordsArray.push(item));
         if(wordsArray[4].toString().toUpperCase() === 'w'.toUpperCase()){
             outcome = true;
-            const player: any = await checkStats(playerName);
-            const games = player.Games + 1;
-            const wins = player.Wins + 1;
-            reportGame(playerName, wordsArray[3], wins, games);
-            message.reply({
-                content: "Good win. Stats saved."
-            })
+            try{
+                const player: any = await checkStats(playerName);
+                const games = player.Games + 1;
+                const wins = player.Wins + 1;
+                reportGame(playerName, wordsArray[3], wins, games);
+                message.reply({
+                    content: "Good win. Stats saved."
+                })
+            } catch(e){
+                console.log(e);
+                message.reply({
+                    content: errorMessage
+                })
+            }
         } else if(wordsArray[4].toString().toUpperCase() === 'l'.toUpperCase()){
             outcome = false;
-            const player: any = await checkStats(playerName);
-            const games = player.Games + 1;
-            const wins = player.Wins;
-            reportGame(playerName, wordsArray[3], wins, games);
-            message.reply({
-                content: "Game stats saved."
-            })
+            try{
+                const player: any = await checkStats(playerName);
+                const games = player.Games + 1;
+                const wins = player.Wins;
+                reportGame(playerName, wordsArray[3], wins, games);
+                message.reply({
+                    content: "Game stats saved."
+                })
+            } catch(e){
+                console.log(e);
+                message.reply({
+                    content: errorMessage
+                })
+            }
         } else{
             message.reply({
-                content: "I couldn't quite understand that. Please try again and make sure your formatting is correct."
+                content: errorMessage
             })
         }
     } else if(message.content === 'mtg -commander stats'){
-        const commanderStats: any[] = await checkAllCommanderStats();
-        commanderStats.forEach(commander => {
-            const winRate = (commander.Wins/commander.Games) * 100;
+        try{
+            const commanderStats: any[] = await checkAllCommanderStats();
+            commanderStats.forEach(commander => {
+                const winRate = (commander.Wins/commander.Games) * 100;
+                message.reply({
+                    content: '**Commander:** ' + commander.Name + ', **Commander Owner:** ' + commander.playerId + ' , **Games played:** ' + commander.Games + ' , **Wins:** ' + commander.Wins + ', **Win Rate:** ' + winRate + '%'
+                })
+            });
+        } catch(e){
+            console.log(e);
             message.reply({
-                content: '**Commander:** ' + commander.Name + ', **Commander Owner:** ' + commander.playerId + ' , **Games played:** ' + commander.Games + ' , **Wins:** ' + commander.Wins + ', **Win Rate:** ' + winRate + '%'
+                content: errorMessage 
             })
-        });
+        }
     } else if(message.content.includes('mtg -commander stats !')){
         const commanderName: string = message.content.toString().split('!')[1];
-        const commanderStats: any = await getCommanderStats(commanderName);
-        const winRate = (commanderStats.Wins/commanderStats.Games) * 100;
-        message.reply({
-            content: '**Commander:** ' + commanderStats.Name + ', **Commander Owner:** ' + commanderStats.playerId + ' , **Games played:** ' + commanderStats.Games + ' , **Wins:** ' + commanderStats.Wins + ', **Win Rate:** ' + winRate + '%'
-        })
-    } else if(message.content === 'mtg -add player'){
-       await addPlayer(playerName).then(() => {
+        try{
+            const commanderStats: any = await getCommanderStats(commanderName);
+            const winRate = (commanderStats.Wins/commanderStats.Games) * 100;
             message.reply({
-                content: playerName + ' added to players.'
+                content: '**Commander:** ' + commanderStats.Name + ', **Commander Owner:** ' + commanderStats.playerId + ' , **Games played:** ' + commanderStats.Games + ' , **Wins:** ' + commanderStats.Wins + ', **Win Rate:** ' + winRate + '%'
             })
-       })
+        } catch (e){
+            console.log(e);
+            message.reply({
+                content: errorMessage
+            })
+        }
+    } else if(message.content === 'mtg -add player'){
+        try{
+        await addPlayer(playerName).then(() => {
+                message.reply({
+                    content: playerName + ' added to players.'
+                })
+        })
+        }catch(e){
+            console.log(e);
+            message.reply({
+                content: errorMessage
+            })
+        }
     } else if(message.content.includes('mtg -add commander !')){
         const commanderName: string = message.content.toString().split('!')[1];
-        await addCommander(playerName, commanderName).then(() => {
+        try{
+            await addCommander(playerName, commanderName).then(() => {
+                message.reply({
+                    content: commanderName + ' added to commanders.'
+                })
+        })
+        } catch(e){
+            console.log(e);
             message.reply({
-                content: commanderName + ' added to commanders.'
+                content: errorMessage
             })
-       })
+        }
     } else if(message.content === 'mtg -help'){
         message.reply({
             content: '**Get stats for all players:** `mtg -all player stats` \n' + 
@@ -97,9 +157,11 @@ client.on('messageCreate', async (message) => {
             '**Get stats for a specific commander:** `mtg -commander stats !COMMANDER_NAME` \n' +
             '**Add a player:** `mtg -add player` \n' +
             '**Add a commander:** `mtg -add commander !COMMANDER_NAME` \n' +
+            '**Report a game:** `mtg -report game COMMANDER_NAME w` *use l if you lost* \n' +
             '**For help:** `mtg -help`'
         })
-    }
+    } 
+  }
 })
 
 client.login(process.env.TOKEN);
