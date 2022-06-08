@@ -62,10 +62,23 @@ client.on('messageCreate', async (message) => {
                 const player: any = await checkStats(playerName);
                 const games = player.Games + 1;
                 const wins = player.Wins + 1;
-                reportGame(playerName, wordsArray[3], wins, games);
-                message.reply({
-                    content: "Good win. Stats saved."
-                })
+                try {
+                    const success: any = await reportGame(playerName, wordsArray[3], wins, games);
+                    if(success){
+                    message.reply({
+                        content: "Good win. Stats saved."
+                    })
+                    } else{
+                        message.reply({
+                            content: errorMessage
+                        })
+                    }
+                } catch(e){
+                    console.log(e);
+                    message.reply({
+                        content: errorMessage
+                    })
+                }
             } catch(e){
                 console.log(e);
                 message.reply({
@@ -78,10 +91,16 @@ client.on('messageCreate', async (message) => {
                 const player: any = await checkStats(playerName);
                 const games = player.Games + 1;
                 const wins = player.Wins;
-                reportGame(playerName, wordsArray[3], wins, games);
-                message.reply({
-                    content: "Game stats saved."
-                })
+                const success: any = await reportGame(playerName, wordsArray[3], wins, games);
+                    if(success){
+                    message.reply({
+                        content: "Game stats saved."
+                    })
+                    } else{
+                        message.reply({
+                            content: "The commander you entered does not exist. Please check the name and formatting and try again."
+                        })
+                    }
             } catch(e){
                 console.log(e);
                 message.reply({
