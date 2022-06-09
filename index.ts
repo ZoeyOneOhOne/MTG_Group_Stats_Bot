@@ -55,15 +55,18 @@ client.on('messageCreate', async (message) => {
     } else if(message.content.includes('mtg -report game')){
         var outcome: boolean = false;
         const wordsArray: string[] = [];
+        const commanderName: string = message.content.toString().split('!')[1];
+        console.log(commanderName);
         message.content.toString().split(' ').map(item => wordsArray.push(item));
-        if(wordsArray[4].toString().toUpperCase() === 'w'.toUpperCase()){
+        if(wordsArray[3].toString().toUpperCase() === 'w'.toUpperCase()){
             outcome = true;
             try{
                 const player: any = await checkStats(playerName);
+                console.log(player);
                 const games = player.Games + 1;
                 const wins = player.Wins + 1;
                 try {
-                    const success: any = await reportGame(playerName, wordsArray[3], wins, games);
+                    const success: any = await reportGame(playerName, commanderName, wins, games);
                     if(success){
                     message.reply({
                         content: "Good win. Stats saved."
@@ -85,13 +88,12 @@ client.on('messageCreate', async (message) => {
                     content: errorMessage
                 })
             }
-        } else if(wordsArray[4].toString().toUpperCase() === 'l'.toUpperCase()){
+        } else if(wordsArray[3].toString().toUpperCase() === 'l'.toUpperCase()){
             outcome = false;
             try{
                 const player: any = await checkStats(playerName);
                 const games = player.Games + 1;
-                const wins = player.Wins;
-                const success: any = await reportGame(playerName, wordsArray[3], wins, games);
+                const success: any = await reportGame(playerName, commanderName, player.Wins, games);
                     if(success){
                     message.reply({
                         content: "Game stats saved."
@@ -176,7 +178,7 @@ client.on('messageCreate', async (message) => {
             '**Get stats for a specific commander:** `mtg -commander stats !COMMANDER_NAME` \n' +
             '**Add a player:** `mtg -add player` \n' +
             '**Add a commander:** `mtg -add commander !COMMANDER_NAME` \n' +
-            '**Report a game:** `mtg -report game COMMANDER_NAME w` *use l if you lost* \n' +
+            '**Report a game:** `mtg -report game w !COMMANDER_NAME` *use `l` if you lost* \n' +
             '**For help:** `mtg -help`'
         })
     } 

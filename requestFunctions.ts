@@ -27,7 +27,6 @@ export async function checkAllCommanderStats(){
     const snapshot = await getDocs(commanderRef);
     const commanderList = snapshot.docs
       .map(doc => doc.data());
-      console.log(commanderList);
     return commanderList;
 }
 
