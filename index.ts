@@ -27,12 +27,15 @@ client.on('messageCreate', async (message) => {
     if(message.content === 'mtg -all player stats'){
         try {
         const stats: any[] = await getAllPlayerStats();
+            var allPlayersString: string = '**All Player Stats** \n';
             stats.forEach(player => {
                 const winRate = (player.Wins/player.Games) * 100;
-                message.reply({
-                    content: '**Name:** ' + player.Name + ' , **Games:** ' + player.Games + ' , **Wins:** ' + player.Wins + ', **Win Rate:** ' + winRate
-                })
+                allPlayersString = allPlayersString + '\n' + '**Name:** ' + player.Name + ' , **Games:** ' + player.Games + ' , **Wins:** ' + player.Wins + ', **Win Rate:** ' + winRate + '\n'
             });
+            message.reply({
+                content: allPlayersString
+            })
+            console.log(allPlayersString);
         } catch(e){
             console.log(e);
             message.reply({
@@ -104,12 +107,14 @@ client.on('messageCreate', async (message) => {
     } else if(message.content === 'mtg -commander stats'){
         try{
             const commanderStats: any[] = await checkAllCommanderStats();
+            var allCommanderString: string = '**All Commander Stats** \n';
             commanderStats.forEach(commander => {
                 const winRate = (commander.Wins/commander.Games) * 100;
-                message.reply({
-                    content: '**Commander:** ' + commander.Name + ', **Commander Owner:** ' + commander.playerId + ' , **Games played:** ' + commander.Games + ' , **Wins:** ' + commander.Wins + ', **Win Rate:** ' + winRate + '%'
-                })
+                allCommanderString = allCommanderString + '\n' + '**Commander:** ' + commander.Name + ', **Commander Owner:** ' + commander.playerId + ' , **Games played:** ' + commander.Games + ' , **Wins:** ' + commander.Wins + ', **Win Rate:** ' + winRate + '%' + '\n'
             });
+            message.reply({
+                content: allCommanderString
+            })
         } catch(e){
             console.log(e);
             message.reply({
