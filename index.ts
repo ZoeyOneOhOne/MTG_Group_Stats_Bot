@@ -60,24 +60,13 @@ client.on('messageCreate', async (message) => {
         message.content.toString().split(' ').map(item => wordsArray.push(item));
         if(wordsArray[3].toString().toUpperCase() === 'w'.toUpperCase()){
             outcome = true;
-            try{
-                const player: any = await checkStats(playerName);
-                console.log(player);
-                const games = player.Games + 1;
-                const wins = player.Wins + 1;
-                try {
-                    const success: any = await reportGame(playerName, commanderName, wins, games);
-                    if(success){
-                    message.reply({
-                        content: "Good win. Stats saved."
-                    })
-                    } else{
-                        message.reply({
-                            content: errorMessage
-                        })
-                    }
-                } catch(e){
-                    console.log(e);
+            try {
+                const success: any = await reportGame(playerName, commanderName, outcome);
+                if(success){
+                message.reply({
+                    content: "Good win. Stats saved."
+                })
+                } else{
                     message.reply({
                         content: errorMessage
                     })
@@ -87,13 +76,11 @@ client.on('messageCreate', async (message) => {
                 message.reply({
                     content: errorMessage
                 })
-            }
+            } 
         } else if(wordsArray[3].toString().toUpperCase() === 'l'.toUpperCase()){
             outcome = false;
             try{
-                const player: any = await checkStats(playerName);
-                const games = player.Games + 1;
-                const success: any = await reportGame(playerName, commanderName, player.Wins, games);
+                const success: any = await reportGame(playerName, commanderName, outcome);
                     if(success){
                     message.reply({
                         content: "Game stats saved."
