@@ -172,7 +172,13 @@ client.on('messageCreate', async (message) => {
         }
     } else if(message.content === 'mtg -help'){
         message.reply({
-            content: '**Get stats for all players:** `mtg -all player stats` \n' + 
+            content: '\n' +
+            '**GETTING STARTED:** \n' + 
+            'To begin using the mtg bot add yourself as a player: `mtg -add player` and then add your commander(s): `mtg -add commander !COMMANDER_NAME` \n' + 
+            '\n' +
+            '**ALL COMMANDS:** \n' + 
+            '*Enter all commands exactly in the format they appear* \n' + 
+            '**Get stats for all players:** `mtg -all player stats` \n' + 
             '**Get stats for you:** `mtg -player stats` \n' +
             '**Get stats for all commanders:** `mtg -commander stats` \n' +
             '**Get stats for a specific commander:** `mtg -commander stats !COMMANDER_NAME` \n' +
