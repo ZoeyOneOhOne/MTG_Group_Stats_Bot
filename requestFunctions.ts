@@ -36,3 +36,18 @@ export async function getCommanderStats(commanderName: string){
     const commander = snapshot?.data();
     return commander;
 }
+
+export async function randomDeck(playerName: string){
+    const commanderRef = collection(db, 'commanders');
+    const snapshot = await getDocs(commanderRef);
+    const commanderList = snapshot.docs
+    const yourList: any = []
+    commanderList.forEach((commander) => {
+      if(commander.data().playerId === playerName){
+        yourList.push(commander.data().Name);
+      }
+    })
+    const randomIndex = Math.floor(Math.random() * yourList.length);
+    const commander = yourList[randomIndex];
+    return commander;
+}

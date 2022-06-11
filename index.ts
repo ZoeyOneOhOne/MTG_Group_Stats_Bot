@@ -1,6 +1,6 @@
 import DiscordJS, { Intents } from 'discord.js'
 import dotenv from 'dotenv'
-import {getAllPlayerStats, checkStats, checkAllCommanderStats, getCommanderStats} from './requestFunctions'
+import {getAllPlayerStats, checkStats, checkAllCommanderStats, getCommanderStats, randomDeck} from './requestFunctions'
 import { reportGame, addPlayer, addCommander } from './postFunctions';
 
 dotenv.config()
@@ -176,6 +176,11 @@ client.on('messageCreate', async (message) => {
                 content: errorMessage
             })
         }
+    } else if(message.content === 'mtg -random deck'){
+        const randomChoice = await randomDeck(playerName);
+        message.reply({
+            content: randomChoice
+        })
     } else if(message.content === 'mtg -help'){
         message.reply({
             content: '\n' +
