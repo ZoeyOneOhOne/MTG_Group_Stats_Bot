@@ -55,6 +55,20 @@ client.on('messageCreate', async (message) => {
                 content: errorMessage
             })
         }
+    } else if(message.content.includes('mtg -player stats !')){
+        const playerName: string = message.content.toString().split('!')[1];
+        try{
+            const playerStats: any = await checkStats(playerName);
+            const winRate = (playerStats.Wins/playerStats.Games) * 100;
+            message.reply({
+                content: '**Player:** ' + playerStats.Name + ' , **Games played:** ' + playerStats.Games + ' , **Wins:** ' + playerStats.Wins + ', **Win Rate:** ' + winRate + '%'
+            })
+        } catch (e){
+            console.log(e);
+            message.reply({
+                content: errorMessage
+            })
+        }
     } else if(message.content.includes('mtg -report game')){
         var outcome: boolean = false;
         const wordsArray: string[] = [];
@@ -176,7 +190,7 @@ client.on('messageCreate', async (message) => {
             '**Get stats for a specific commander:** `mtg -commander stats !COMMANDER_NAME` \n' +
             '**Add a player:** `mtg -add player` \n' +
             '**Add a commander:** `mtg -add commander !COMMANDER_NAME` \n' +
-            '**Report a game:** `mtg -report game w !COMMANDER_NAME` *use `l` if you lost* \n' +
+            '**Report a game:** `mtg -report game w !COMMANDER_NAME` use "l" if you lost \n' +
             '**For help:** `mtg -help`'
         })
     } 

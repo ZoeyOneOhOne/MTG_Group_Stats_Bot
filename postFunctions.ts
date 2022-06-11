@@ -17,14 +17,14 @@ export async function reportGame(playerName: string,commanderName: string, outco
     const playerStats: any = await (await getDoc(playerRef));
     const player = playerStats?.data();
     console.log(player);
-
+    console.log(player.Wins + 1);
+    console.log(commander.Wins + 1);
+    console.log(outcome);
     if(commander){
-        if(outcome){
-            const comWins = commander.Wins +1;
-            const playerWins = player.Wins +1;
+        if(outcome){            
             try { 
                 await updateDoc(doc(db, 'commanders', commanderName), {
-                    Wins:  comWins,
+                    Wins:  commander.Wins + 1,
                     Games: commander.Games + 1,
                 })
                 return true;
@@ -33,7 +33,7 @@ export async function reportGame(playerName: string,commanderName: string, outco
             }
             try {
                 await updateDoc(doc(db, 'players', playerName), {
-                    Wins:  playerWins,
+                    Wins:  player.Wins +1,
                     Games: player.Games + 1,
                 })
                 return true;
