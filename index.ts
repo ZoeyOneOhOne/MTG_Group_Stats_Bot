@@ -186,6 +186,7 @@ client.on('messageCreate', async (message) => {
             '*Enter all commands exactly in the format they appear* \n' + 
             '**Get stats for all players:** `mtg -all player stats` \n' + 
             '**Get stats for you:** `mtg -player stats` \n' +
+            '**Get stats for a specific player:** `mtg -player stats !PLAYER_NAME` \n' +
             '**Get stats for all commanders:** `mtg -commander stats` \n' +
             '**Get stats for a specific commander:** `mtg -commander stats !COMMANDER_NAME` \n' +
             '**Add a player:** `mtg -add player` \n' +
