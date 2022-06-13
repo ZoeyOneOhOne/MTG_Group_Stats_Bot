@@ -11,15 +11,10 @@ export async function reportGame(playerName: string,commanderName: string, outco
     const commanderRef = doc(db, 'commanders', commanderName);
     const commanderStats: any = await (await getDoc(commanderRef));
     const commander = commanderStats?.data();
-    console.log(commander);
 
     const playerRef = doc(db, 'players', playerName);
     const playerStats: any = await (await getDoc(playerRef));
     const player = playerStats?.data();
-    console.log(player);
-    console.log(player.Wins + 1);
-    console.log(commander.Wins + 1);
-    console.log(outcome);
     if(commander){
         if(outcome){            
             try { 
@@ -27,7 +22,6 @@ export async function reportGame(playerName: string,commanderName: string, outco
                     Wins:  commander.Wins + 1,
                     Games: commander.Games + 1,
                 })
-                return true;
             } catch(e){
                 console.log(e);
             }
@@ -36,7 +30,6 @@ export async function reportGame(playerName: string,commanderName: string, outco
                     Wins:  player.Wins +1,
                     Games: player.Games + 1,
                 })
-                return true;
             } catch(e){
                 console.log(e);
             }
@@ -46,7 +39,6 @@ export async function reportGame(playerName: string,commanderName: string, outco
                     Wins:  commander.Wins,
                     Games: commander.Games + 1,
                 })
-                return true;
             } catch(e){
                 console.log(e);
             }
@@ -55,11 +47,11 @@ export async function reportGame(playerName: string,commanderName: string, outco
                     Wins:  player.Wins,
                     Games: player.Games + 1,
                 })
-                return true;
             } catch(e){
                 console.log(e);
             }
         }
+        return true;
   }
   else{
       return false;

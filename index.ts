@@ -35,7 +35,6 @@ client.on('messageCreate', async (message) => {
             message.reply({
                 content: allPlayersString
             })
-            console.log(allPlayersString);
         } catch(e){
             console.log(e);
             message.reply({
@@ -73,7 +72,6 @@ client.on('messageCreate', async (message) => {
         var outcome: boolean = false;
         const wordsArray: string[] = [];
         const commanderName: string = message.content.toString().split('!')[1];
-        console.log(commanderName);
         message.content.toString().split(' ').map(item => wordsArray.push(item));
         if(wordsArray[3].toString().toUpperCase() === 'w'.toUpperCase()){
             outcome = true;
