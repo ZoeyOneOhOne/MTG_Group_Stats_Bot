@@ -1,3 +1,4 @@
 node_modules
 service_account
 .env
+dist/service_account
