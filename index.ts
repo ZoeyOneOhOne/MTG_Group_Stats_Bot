@@ -4,6 +4,7 @@ import {getAllPlayerStats, checkStats, checkAllCommanderStats, getCommanderStats
 import { reportGame, addPlayer, addCommander } from './postFunctions';
 
 dotenv.config()
+const token = process.env.TOKEN;
 
 const client = new DiscordJS.Client({
     intents: [
